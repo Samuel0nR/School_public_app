@@ -1,0 +1,39 @@
+# =========================
+# 🔐 ENV VARIABLES
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# 🐍 PYTHON / BACKEND
+# =========================
+backend/venv/
+backend/env/
+backend/__pycache__/
+backend/**/*.pyc
+
+# Logs
+backend/*.log
+
+
+# =========================
+# 🧠 GENERAL
+# =========================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+
+# =========================
+# 💻 IDEs
+# =========================
+.vscode/
+.idea/
+
+# =========================
+# 🖥️ SISTEMA
+# =========================
+.DS_Store
+Thumbs.db

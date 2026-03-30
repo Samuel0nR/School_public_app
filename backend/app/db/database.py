@@ -1,6 +1,10 @@
 from pymongo import MongoClient
+from dotenv import load_dotenv
+import os
 
-connection_url = "mongodb+srv://dbSamRM:RadezioX@pyhton-cluster.jbk1acq.mongodb.net/?appName=Pyhton-cluster"
+load_dotenv()
+
+connection_url = os.getenv("DB_CONNCT")
 
 client = MongoClient(connection_url)
 db = client["school_python"]
