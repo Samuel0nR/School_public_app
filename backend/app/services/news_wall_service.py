@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 from pymongo.errors import PyMongoError
 
-from db.database import db
+from app.db.database import db
 
 collection = db["news_wall"]
 

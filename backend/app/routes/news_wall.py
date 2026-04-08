@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from schemas.news_wall_schema import News
-from services.news_wall_service import get_news, post_news
+from app.schemas.news_wall_schema import News
+from app.services.news_wall_service import get_news, post_news
 
 router = APIRouter(
    prefix="/news",
