@@ -6,6 +6,10 @@ from app.routes import news_wall
 app = FastAPI()
 app.include_router(news_wall.router)
 
+@app.get("/")
+def root():
+   return { "code": 200, "status": "OK" }
+
 app.add_middleware(
    CORSMiddleware,
    allow_origins=["*"],
