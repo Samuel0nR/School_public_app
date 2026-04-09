@@ -4,7 +4,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.routes import news_wall
 
 app = FastAPI()
-app.include_router(news_wall.router)
 
 @app.get("/")
 def root():
@@ -17,3 +16,5 @@ app.add_middleware(
    allow_methods=["*"],
    allow_headers=["*"]
 )
+
+app.include_router(news_wall.router)
