@@ -14,6 +14,6 @@ app.add_middleware(
 )
 app.include_router(news_wall.router)
 
-@app.get("/", methods=["HEAD", "GET"])
+@app.api_route("/", methods=["GET", "HEAD"])
 def root():
    return { "code": 200, "status": "OK" }
