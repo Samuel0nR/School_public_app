@@ -1,6 +1,6 @@
-export type News = {
-  Autor_Name: string;
-  Title: string;
-  Comments: string;
-  Created_At: Date;
+export type NewsRequest = {
+  autor_name: string;
+  title: string;
+  comments: string;
+  created_at?: string;
 };
