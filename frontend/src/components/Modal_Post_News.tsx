@@ -1,17 +1,22 @@
 import type { News } from "../types/News";
 
+import { LoadingComponent } from "./Loading_Component";
+
 type NewNews = Omit<News, "_id">;
 
 interface Props {
   isOpen: boolean;
+  isLoading: boolean;
   onClose: () => void;
   onSubmit: (data: NewNews) => void;
 }
 
-export const ModalPostNews = ({ isOpen, onClose, onSubmit }: Props) => {
+export const ModalPostNews = ({ isOpen, isLoading, onClose, onSubmit }: Props) => {
+  // const [loading, setLoading] = useState(false);
+
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
@@ -23,14 +28,19 @@ export const ModalPostNews = ({ isOpen, onClose, onSubmit }: Props) => {
       created_at: new Date().toISOString(),
     };
 
-    onSubmit(data);
+    try {
+      onSubmit(data);  
+    } catch(error) {
+      console.error("Ha ocurrido un error al crear el Post ", error);
+    } finally {
 
-    // limpiar
-    // onClose();
+    }
   };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
+      <LoadingComponent isLoading={isLoading} message="Creando Post..." />
+
       {/* Overlay */}
       <div
         className="absolute inset-0 bg-black/40 backdrop-blur-sm"

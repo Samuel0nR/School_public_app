@@ -10,8 +10,9 @@ export const News_wall = () => {
   const navigate = useNavigate();
 
   const [isOpen, setIsOpen] = useState(false);
-  const [posts, setPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const [posts, setPosts] = useState<any[]>([]);
 
   const loadNews = async () => {
     try {
@@ -29,21 +30,24 @@ export const News_wall = () => {
   }, []);
 
   const handleCreatePost = async (data: any) => {
+    setLoading(true)
     try {
       const req = await postNews(data);
 
       const newPost = {
         ...data,
-        _id: req._id,
+        _id: req.id,
       };
+
       setPosts((prev) => {
         return [newPost, ...prev];
       });
 
       setIsOpen(false);
-
-   } catch (error) {
+    } catch (error) {
       console.error("Error creando post", error);
+    }finally{
+      setLoading(false)
     }
   };
 
@@ -75,16 +79,18 @@ export const News_wall = () => {
       {/* Modal */}
       <ModalPostNews
         isOpen={isOpen}
+        isLoading={loading}
         onClose={() => setIsOpen(false)}
         onSubmit={(data) => {
-          console.log("Nuevo post:", data);
           handleCreatePost(data);
         }}
       />
 
       {/* Feed */}
       {loading ? (
-        <div className="bg-white/80 text-center text-gray-500 rounded-2xl p-4">Cargando...</div>
+        <div className="bg-white/80 text-center text-gray-500 rounded-2xl p-4">
+          Cargando...
+        </div>
       ) : posts.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
           {posts.map((post) => (
@@ -96,7 +102,7 @@ export const News_wall = () => {
           <p className="text-gray-500 text-lg mb-2">
             No hay publicaciones aún 😢
           </p>
-          <p className="text-sm text-gray-400">Sé el primero en crear una 🚀</p>
+          <p className="text-sm text-gray-400">Sé el primero en crear una!</p>
         </div>
       )}
     </section>
