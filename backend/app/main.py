@@ -1,19 +1,21 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routes import news_wall
+from app.routes import news_wall, users
 
 app = FastAPI()
 
 app.add_middleware(
-   CORSMiddleware,
-   allow_origins=["*"],
-   allow_credentials=True,
-   allow_methods=["*"],
-   allow_headers=["*"],
+  CORSMiddleware,
+  allow_origins=["*"],
+  allow_credentials=True,
+  allow_methods=["*"],
+  allow_headers=["*"],
 )
-app.include_router(news_wall.router)
 
-@app.api_route("/", methods=["GET", "HEAD"])
+app.include_router(news_wall.router)
+app.include_router(users.router)
+
+@app.api_route("/", methods=["GET"])
 def root():
-   return { "code": 200, "status": "OK" }
+  return { "code": 200, "status": "OK" }
