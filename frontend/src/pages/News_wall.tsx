@@ -5,56 +5,74 @@ import { NewsCard } from "../components/News_Card";
 import { ModalPostNews } from "../components/Modal_Post_News";
 
 import { getNews, postNews } from "../api/News.service";
+import type { News, NewsRequest } from "../types/News";
+import { useAlert } from "../Hooks/AlertHook";
+
 
 export const News_wall = () => {
   const navigate = useNavigate();
-
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen,  setIsOpen]  = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const [posts, setPosts] = useState<any[]>([]);
+  const [posts,   setPosts]   = useState<News[]>([]);
+  const { success, error, AlertComponent } = useAlert();
 
   const loadNews = async () => {
     try {
       const data = await getNews();
       setPosts(data);
+
     } catch (error) {
       console.error("Error cargando noticias", error);
+
     } finally {
       setLoading(false);
     }
   };
+ 
+  useEffect(() => { loadNews(); }, []);
+  
+  type Request = Omit<NewsRequest, "_id">
 
-  useEffect(() => {
-    loadNews();
-  }, []);
-
-  const handleCreatePost = async (data: any) => {
-    setLoading(true)
+  const handleCreatePost = async (data: Request) => {
+    setLoading(true);
     try {
       const req = await postNews(data);
-
-      const newPost = {
+ 
+      // Post optimista con todos los campos correctos
+      const newPost: News = {
         ...data,
         _id: req.id,
+        created_at: new Date().toISOString(),
+        expires_at: null,
       };
-
-      setPosts((prev) => {
-        return [newPost, ...prev];
-      });
+ 
+      // Fijados van al inicio, resto al inicio del resto
+      setPosts((prev) =>
+        data.fixed ? [newPost, ...prev] : [newPost, ...prev]
+      );
 
       setIsOpen(false);
-    } catch (error) {
-      console.error("Error creando post", error);
-    }finally{
-      setLoading(false)
+      success("¡Comunicado publicado!", "Ya aparece en el muro.", 3000);
+
+
+    } catch (err) {
+      console.error("Error creando post", err);
+      error("Error al publicar", "Intenta nuevamente.");
+
+
+    } finally {
+      setLoading(false);
+      
     }
   };
 
   return (
     <section className="w-full max-w-4xl flex flex-col gap-6 my-5">
+      {AlertComponent}
+
       {/* Header */}
-      <div className="bg-white/80 backdrop-blur-md shadow-xl rounded-2xl p-6 flex justify-between items-center">
+      <div className="bg-white/80 backdrop-blur-md shadow-xl rounded-2xl p-6 flex justify-between items-center sticky top-18 z-40">
         <h1 className="text-2xl font-bold text-gray-800">
           📰 Muro de Noticias
         </h1>

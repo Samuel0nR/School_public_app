@@ -1,12 +1,16 @@
 @import "tailwindcss";
 
+*{
+  cursor: default;
+  scrollbar-width: none;
+}
 body {
   background: url("./assets/background_main.jpg") no-repeat center center fixed;
   background-size: cover;
   height: 100dvh;
 }
 
-button {
+button, a {
   cursor: pointer;
 }
 
